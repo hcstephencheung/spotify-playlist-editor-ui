@@ -27,5 +27,8 @@
     "dependencies": {
         "react": "^16.7.0",
         "react-dom": "^16.7.0"
-    }
+    },
+    "browserslist": [
+        "since 2017-06"
+    ]
 }

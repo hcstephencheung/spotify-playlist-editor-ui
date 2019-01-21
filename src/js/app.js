@@ -4,34 +4,62 @@ import { Playlists } from "./Playlists";
 
 const ENDPOINT = "http://localhost:8888/playlists";
 
+const fetchData = async () => {
+    let response = await fetch(ENDPOINT);
+    let playlistsData = await response.json();
+
+    return playlistsData;
+};
+
 class App extends React.Component {
-    componentDidMount() {
-        let playlistsData = {};
+    constructor(props) {
+        super(props);
 
-        fetch(ENDPOINT)
-            .then(response => {
-                if (response.status !== 200) {
-                    console.log("Could not fetch: ", response.status);
-                    return;
-                }
+        this.state = {
+            loading: true,
+            playlists: [],
+        };
+    }
 
-                response.json().then(data => {
-                    playlistsData = data;
-                    console.log("Fetched Data: ", playlistsData);
-                });
-            })
-            .catch(err => {
-                console.log("Fetch Error: ", err);
-            });
+    async componentDidMount() {
+        let playlists = await fetchData();
+        console.log("fetched data", playlists);
+
+        this.setState({
+            playlists,
+            loading: false,
+        });
     }
 
     render() {
+        if (this.state.loading) {
+            return (
+                <div>
+                    <h1>Playlist Editor</h1>
+                    <div> Loading... </div>
+                </div>
+            );
+        }
+
         return (
             <div>
                 <h1>Playlist Editor</h1>
-                <Playlists name="test 1" total={1} />
-                <Playlists name="test 2" total={50} />
-                <Playlists name="test 3" total={23} />
+
+                <div>
+                    {this.state.playlists.map(playlist => {
+                        return (
+                            <Playlists
+                                key={playlist.id}
+                                name={playlist.name}
+                                id={playlist.id}
+                            />
+                        );
+                    })}
+
+                    <pre>
+                        <code>{JSON.stringify(this.state)}</code>
+                    </pre>
+                </div>
             </div>
         );
     }
