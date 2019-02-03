@@ -3,66 +3,69 @@ import { render } from "react-dom";
 import { Playlists } from "./Playlists";
 
 const ENDPOINT = "http://localhost:8888/playlists";
+const FETCH_OPTIONS = {
+  credentials: "include"
+};
 
 const fetchData = async () => {
-    let response = await fetch(ENDPOINT);
-    let playlistsData = await response.json();
+  let response = await fetch(ENDPOINT, FETCH_OPTIONS);
+  let playlistsData = await response.json();
 
-    return playlistsData;
+  return playlistsData;
 };
 
 class App extends React.Component {
-    constructor(props) {
-        super(props);
+  constructor(props) {
+    super(props);
 
-        this.state = {
-            loading: true,
-            playlists: [],
-        };
+    this.state = {
+      loading: true,
+      playlists: []
+    };
+  }
+
+  async componentDidMount() {
+    let playlists = await fetchData();
+    console.log("fetched data", playlists);
+
+    this.setState({
+      playlists,
+      loading: false
+    });
+  }
+
+  render() {
+    if (this.state.loading) {
+      return (
+        <div>
+          <h1>Playlist Editor</h1>
+          <div> Loading... </div>
+        </div>
+      );
     }
 
-    async componentDidMount() {
-        let playlists = await fetchData();
-        console.log("fetched data", playlists);
+    return (
+      <div>
+        <h1>Playlist Editor</h1>
 
-        this.setState({
-            playlists,
-            loading: false,
-        });
-    }
-
-    render() {
-        if (this.state.loading) {
+        <div>
+          {this.state.playlists.map(playlist => {
             return (
-                <div>
-                    <h1>Playlist Editor</h1>
-                    <div> Loading... </div>
-                </div>
+              <Playlists
+                key={playlist.id}
+                name={playlist.name}
+                id={playlist.id}
+              />
             );
-        }
+          })}
 
-        return (
-            <div>
-                <h1>Playlist Editor</h1>
-
-                <div>
-                    {this.state.playlists.map(playlist => {
-                        return (
-                            <Playlists
-                                key={playlist.id}
-                                name={playlist.name}
-                                id={playlist.id}
-                            />
-                        );
-                    })}
-
-                    <pre>
-                        <code>{JSON.stringify(this.state)}</code>
-                    </pre>
-                </div>
-            </div>
-        );
-    }
+          <pre>
+            <code>{JSON.stringify(this.state)}</code>
+          </pre>
+        </div>
+      </div>
+    );
+  }
 }
 
 render(<App />, document.getElementById("root"));
