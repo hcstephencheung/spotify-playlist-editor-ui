@@ -3,7 +3,7 @@ import { render } from "react-dom";
 import { Router, Link } from "@reach/router";
 import Playlists from "./Playlists";
 import PlaylistProfile from "./PlaylistProfile";
-import Home from "./Login";
+import Home from "./Home";
 import Login from "./Login";
 import Token from "./Token";
 
