@@ -36,13 +36,13 @@ class PlaylistProfile extends React.Component {
       <div className="profile-page">
         <h1> This is a playlist details page </h1>
         <p> Name of playlist: {id} </p>
-        {tracks.length &&
+        {!!tracks.length &&
           tracks.map(trackItem => {
             const { track } = trackItem;
             const { name } = track;
             return (
               <div>
-                <h3>{track.name}</h3>
+                <h3>{name}</h3>
               </div>
             );
           })}
