@@ -2,7 +2,7 @@ import React from "react";
 import { render } from "react-dom";
 import { Router, Link } from "@reach/router";
 import Playlists from "./Playlists";
-import PlaylistProfile from "./PlaylistProfile";
+import TrackList from "./TrackList";
 import Home from "./Home";
 import Login from "./Login";
 import Token from "./Token";
@@ -21,7 +21,7 @@ class App extends React.Component {
           <Login path="/login" />
           <Token path="/token" />
           <Playlists path="/playlists" />
-          <PlaylistProfile path="/playlist/:id" />
+          <TrackList path="/playlist/:id" />
         </Router>
       </div>
     );

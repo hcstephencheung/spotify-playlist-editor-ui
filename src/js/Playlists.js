@@ -1,5 +1,6 @@
 import React from "react";
 import Playlist from "./Playlist";
+import { navigate } from "@reach/router";
 
 const ENDPOINT = "http://localhost:8888/playlists";
 const FETCH_OPTIONS = {
@@ -8,6 +9,10 @@ const FETCH_OPTIONS = {
 
 const fetchData = async () => {
   let response = await fetch(ENDPOINT, FETCH_OPTIONS);
+  if (response.status === 401) {
+    navigate("/login");
+    return;
+  }
   let playlistsData = await response.json();
 
   return playlistsData;
@@ -33,7 +38,8 @@ class Playlists extends React.Component {
   }
 
   render() {
-    if (this.state.loading) {
+    const { loading, playlists } = this.state;
+    if (!!loading) {
       return (
         <div>
           <h1>Playlist Editor</h1>
@@ -43,8 +49,9 @@ class Playlists extends React.Component {
     }
 
     return (
-        <div>
-          {this.state.playlists.map(playlist => {
+      <div>
+        {playlists &&
+          playlists.map(playlist => {
             return (
               <Playlist
                 key={playlist.id}
@@ -54,10 +61,10 @@ class Playlists extends React.Component {
             );
           })}
 
-          <pre>
-            <code>{JSON.stringify(this.state)}</code>
-          </pre>
-        </div>
+        <pre>
+          <code>{JSON.stringify(this.state)}</code>
+        </pre>
+      </div>
     );
   }
 }
