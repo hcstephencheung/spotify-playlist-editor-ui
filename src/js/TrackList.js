@@ -19,7 +19,7 @@ const fetchData = async trackId => {
 
   return playlistData;
 };
-class PlaylistProfile extends React.Component {
+class TrackList extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -45,10 +45,12 @@ class PlaylistProfile extends React.Component {
         <h1> This is a playlist details page </h1>
         <p> Name of playlist: {id} </p>
         {!!tracks.length &&
-          tracks.map(trackItem => <Track name={trackItem.track.name} />)}
+          tracks.map(trackItem => (
+            <Track key={trackItem.track.id} name={trackItem.track.name} />
+          ))}
       </div>
     );
   }
 }
 
-export default PlaylistProfile;
+export default TrackList;
